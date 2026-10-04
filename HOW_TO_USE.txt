@@ -1,0 +1,387 @@
+MR MAN'S DOWNLOADER - HOW TO USE IT
+====================================
+
+Hey, thanks for grabbing this. I tried to keep it simple, but there are a few
+moving parts, so I wrote everything down in one place. If you only read one
+section, read "THE QUICK VERSION" right below.
+
+
+THE QUICK VERSION
+-----------------
+1. Install Python (python.org) and tick "Add python.exe to PATH" during setup.
+2. Open a terminal and run:  pip install yt-dlp mutagen gallery-dl
+3. Install ffmpeg (see section 2 below, it's the one people forget).
+4. Double-click mr_mans_downloader.py (or run it from a terminal).
+5. Paste a link, hit Download.
+
+That's it. The rest of this file is the longer explanation plus fixes for the
+things that tend to go wrong.
+
+
+WHAT THIS PROGRAM ACTUALLY IS
+-----------------------------
+It's a friendly window wrapped around a few free, open-source tools:
+
+  - yt-dlp       does the downloading for YouTube, SoundCloud and a ton of
+                 other sites
+  - ffmpeg       converts things (turns video into MP3, merges video+audio,
+                 etc.). yt-dlp can't make MP3s without it.
+  - gallery-dl   used for Instagram and TikTok posts, since it's better at
+                 grabbing photo carousels
+  - mutagen      a small Python library that lets the Tag Editor tab edit
+                 song info (title, artist, album...)
+
+The app can download most of these for you the first time you open it, but
+sometimes that doesn't work (no internet, antivirus got nervous, whatever), so
+below are all the manual ways to install everything.
+
+
+SECTION 1: INSTALLING PYTHON
+----------------------------
+You need Python 3.9 or newer.
+
+Option A (the normal way)
+  1. Go to https://www.python.org/downloads/
+  2. Download the latest installer for Windows.
+  3. Run it. On the very first screen, check the box that says
+     "Add python.exe to PATH". This is the single most common thing people
+     miss, and it's why "pip is not recognized" errors happen later.
+  4. Click Install Now.
+
+Option B (no clicking through installers)
+  Open Command Prompt or PowerShell and run:
+      winget install Python.Python.3.12
+
+To check it worked, open a NEW terminal window (an old one won't see the
+change) and type:
+      python --version
+You should see something like "Python 3.12.x".
+
+If "python" doesn't work but "py" does, that's fine, just use "py" in place of
+"python" everywhere in this guide.
+
+
+SECTION 2: INSTALLING THE TOOLS
+-------------------------------
+Quick note first: when you open the app on Windows, it checks whether yt-dlp,
+ffmpeg and gallery-dl are installed. If something is missing it asks if you
+want it installed, and if you say yes it downloads the files into a folder
+called "tools" right next to the program. That's the easiest route. If that
+works for you, you can skip the rest of this section.
+
+If you'd rather do it by hand (or the automatic install failed), here are the
+options. Pick whichever you're comfortable with.
+
+--- The pip way (needs Python) ---
+
+Open a terminal and run these:
+
+    pip install yt-dlp
+    pip install mutagen
+    pip install gallery-dl
+
+Or all at once:
+
+    pip install yt-dlp mutagen gallery-dl
+
+If you get "pip is not recognized", try one of these instead:
+
+    python -m pip install yt-dlp mutagen gallery-dl
+    py -m pip install yt-dlp mutagen gallery-dl
+
+If you get a permissions error, add --user:
+
+    python -m pip install --user yt-dlp mutagen gallery-dl
+
+To update later (yt-dlp changes constantly because sites keep changing things
+under it, so this is worth doing every month or two, or any time downloads
+suddenly stop working):
+
+    python -m pip install -U yt-dlp gallery-dl
+
+Heads up: pip does NOT install ffmpeg. That one has to be done separately,
+see below.
+
+--- The non-pip way: winget (built into Windows 10/11) ---
+
+    winget install yt-dlp.yt-dlp
+    winget install Gyan.FFmpeg
+
+Close and reopen your terminal afterwards so the new programs are found.
+(gallery-dl isn't something I'd count on winget for, use pip or the manual
+download below for that one.)
+
+--- The non-pip way: Scoop ---
+
+If you already use Scoop (https://scoop.sh):
+
+    scoop install yt-dlp ffmpeg gallery-dl
+
+--- The non-pip way: Chocolatey ---
+
+If you already use Chocolatey, in an Administrator terminal:
+
+    choco install yt-dlp ffmpeg
+
+--- The manual way (no package managers at all) ---
+
+This works everywhere and is basically what the app does for you automatically.
+
+  yt-dlp:
+    Download yt-dlp.exe from https://github.com/yt-dlp/yt-dlp/releases/latest
+
+  gallery-dl:
+    Download gallery-dl.exe from
+    https://github.com/mikf/gallery-dl/releases/latest
+
+  ffmpeg:
+    Get a Windows build from https://ffmpeg.org/download.html (the links
+    there point to builds from gyan.dev or BtbN). Download the zip, open it,
+    go into the "bin" folder, and copy out ffmpeg.exe and ffprobe.exe.
+
+Then put all of those .exe files in ONE of these places:
+
+  a) The "tools" folder next to mr_mans_downloader.py (the app creates it
+     the first time it runs, or you can make it yourself). This is the
+     easiest, the app looks there automatically.
+  b) Any folder that's on your Windows PATH.
+
+If you put things somewhere unusual, you can also point the app at them from
+the "Tool Launcher" tab using the "Set Path..." button.
+
+--- Checking that everything is installed ---
+
+Open a fresh terminal and run:
+
+    yt-dlp --version
+    ffmpeg -version
+    ffprobe -version
+    gallery-dl --version
+
+Each one should print a version number instead of an error. (If you used the
+"tools" folder method, the terminal won't find them, that's normal. The app
+will, because it adds that folder to its own search path.)
+
+
+SECTION 3: STARTING THE APP
+---------------------------
+Easiest: double-click mr_mans_downloader.py.
+
+If a window flashes and disappears, or nothing happens, open a terminal in the
+folder and run it from there so you can see any error message:
+
+    cd path\to\the\folder
+    python mr_mans_downloader.py
+
+(Tip: in File Explorer, click the address bar, type "cmd", and press Enter.
+It opens a terminal already sitting in that folder.)
+
+When the app opens you'll see small messages along the bottom of the window,
+like "Checking for required tools..." and "Scanning for yt-dlp updates...".
+Nothing is wrong, it's just checking whether you have the latest version of
+yt-dlp. If a newer one exists it'll ask if you want to update. Saying yes is
+almost always a good idea, because old versions are the number one reason a
+download that used to work suddenly stops working.
+
+
+SECTION 4: DOWNLOADING STUFF (THE DOWNLOADER TAB)
+-------------------------------------------------
+The basic flow is: paste link, pick options, choose a folder, press Download.
+
+1. Paste the link into the big box at the top.
+
+2. Format dropdown
+   Controls video quality and file type for normal video links.
+     - "Best video+audio (mp4)" is the safe default, plays on nearly
+       everything.
+     - "Best video+audio (mkv)" same quality, different container.
+     - "Best available" lets yt-dlp choose whatever it likes.
+     - 1080p / 720p / 480p max are for when you want smaller files.
+
+3. Checkboxes
+     - Audio only (MP3): skips the video and gives you an MP3. Needs ffmpeg.
+     - Download subtitles: grabs English subtitles and bakes them in.
+     - Download full playlist: if the link is a video inside a playlist,
+       this decides whether you get just that one video or the entire list.
+
+4. Save to
+   The folder your files end up in. Press Browse... to change it. You can set
+   a permanent default in Settings.
+
+5. Press Download
+   The log at the bottom shows what's happening, and the bar above it shows
+   progress. Cancel stops it.
+
+What happens with each kind of link:
+
+  YouTube video       Downloads as a normal video using your format choice.
+
+  YouTube playlist    Only downloads the whole thing if "Download full
+                      playlist" is ticked.
+
+  YouTube channel     In "auto" mode the app peeks at the channel to see if
+                      it looks like a music/artist channel (for example the
+                      auto-generated "- Topic" channels). If it does, it
+                      grabs every upload as MP3 and numbers them. If it
+                      doesn't, it treats it like normal videos. You can
+                      force this either way in Settings.
+
+  SoundCloud track    Downloads as MP3 with the artist, title and cover art
+                      embedded.
+
+  SoundCloud profile  Lists every track, then downloads them one at a time
+                      with a short pause between each. If one fails it
+                      moves on to the next. It keeps a little archive file
+                      so if you run the same profile link again later, it
+                      skips everything you already have. Very handy if
+                      something gets interrupted.
+
+  Instagram / TikTok  Handled by gallery-dl. Grabs every photo and video in
+                      a post or carousel. Files go into a folder named after
+                      the account.
+
+Find Oldest Track
+   Paste a SoundCloud page link and press this to find out which track on
+   that page was uploaded first. It checks every track's date, so on a big
+   profile it can take a while.
+
+
+SECTION 5: COOKIES (ONLY IF YOU NEED THEM)
+------------------------------------------
+Some content needs you to be logged in: private or follower-only SoundCloud
+tracks, age-restricted YouTube videos, some Instagram posts. Under Options
+there's a dropdown for each site where you can pick your browser. The app then
+borrows your browser's login so the site thinks it's you.
+
+  - Leave it on "None" unless you actually run into a problem.
+  - Be logged in to that site in the browser you pick.
+  - Closing the browser first often helps, since some browsers lock their
+    cookie files while they're open.
+  - If your browser has multiple profiles, type the profile name into the
+    "Browser profile (optional)" box.
+  - Firefox tends to be the most reliable. Chrome, Edge and Brave have
+    changed how they protect cookies a few times, and it can break this
+    feature for a while until yt-dlp catches up. If that happens, try
+    Firefox or update yt-dlp.
+
+For big SoundCloud profiles, using cookies is honestly the best thing you can
+do, because logged-in requests are far less likely to get blocked.
+
+
+SECTION 6: THE OTHER TABS
+-------------------------
+Tag Editor
+  Pick a folder of music, click a song, and edit the title, artist, album,
+  album artist, track number, year and genre. Press Save Tags. Needs mutagen
+  (pip install mutagen). If you need something heavier for auto-tagging, the
+  Tool Launcher has MusicBrainz Picard.
+
+Converter
+  Add files, choose Audio or Video, pick an output format, and press Convert.
+  For audio you can set a bitrate (320 is the highest common quality for MP3).
+  For video you can shrink the resolution and set a quality number called CRF,
+  where LOWER means BETTER quality and bigger files (23 is a good default).
+  Converted files go to the output folder you choose, your originals are not
+  touched. Needs ffmpeg.
+
+Duplicate Finder
+  Choose a folder and press Scan. It compares the actual contents of files, not
+  just names, so it catches real duplicates even if they're named differently.
+  Be careful with the "Delete Extra Copies" button: it permanently deletes
+  everything after the first file in each group, and it does NOT go to the
+  recycle bin. Look at the list before you press it.
+
+Tool Launcher
+  A shortcut page for useful programs (Mp3tag, Picard, beets, ffmpeg, Spek,
+  Audacity, gallery-dl). It shows whether each one was found, lets you launch
+  it, point the app to it manually ("Set Path..."), or open its download page
+  ("Get It").
+
+
+SECTION 7: SETTINGS
+-------------------
+Click the Settings button at the top right.
+
+  - Theme and Font: lots of choices, and they preview live as you pick.
+  - Language: English, Spanish, French or German.
+  - YouTube music-channel handling: auto / always / never (see above).
+  - Auto-clear log: wipes the log after this many lines so the app doesn't
+    get sluggish.
+  - Default save folder: where downloads go by default.
+  - Concurrent fragments: how many pieces of a file are downloaded at once.
+    Higher is faster but can get you rate-limited. 4 is a sensible middle.
+  - Retries: how many times to retry before giving up on a file.
+
+Your settings are saved in a file called ytdlp_gui_settings.json next to the
+program. Delete that file if you ever want to start fresh.
+
+
+TROUBLESHOOTING
+---------------
+"yt-dlp not found"
+   It isn't installed, or isn't where the app can see it. Restart the app and
+   accept the install prompt, or install it using Section 2.
+
+MP3 or merging doesn't work / errors mentioning ffmpeg or ffprobe
+   ffmpeg is missing. This is the most common problem, since pip doesn't
+   install it. Use winget install Gyan.FFmpeg, or the manual way in Section 2.
+   Make sure ffprobe.exe is there too, not just ffmpeg.exe.
+
+"pip is not recognized"
+   Python wasn't added to PATH. Try  python -m pip ...  or  py -m pip ...
+   If neither works, reinstall Python and tick "Add python.exe to PATH".
+
+Downloads that worked yesterday suddenly fail
+   Update yt-dlp. Accept the update prompt when the app offers it, or run:
+       python -m pip install -U yt-dlp
+
+HTTP Error 403 or 429 / "Too many requests"
+   The site thinks you're sending too many requests and is throttling you.
+   Wait a while (15 to 60 minutes is typical), lower "Concurrent fragments"
+   in Settings, and set a browser under the cookies options. Already
+   downloaded tracks are skipped when you rerun the same SoundCloud profile
+   link, so you won't lose progress.
+
+Instagram or TikTok won't download
+   Make sure gallery-dl is installed (Tool Launcher tab will tell you). Many
+   Instagram posts need you to be logged in, so set a browser in the Instagram
+   cookies dropdown and make sure you're logged in on that browser.
+
+Tag Editor says mutagen isn't installed
+   Run  python -m pip install mutagen  and restart the app.
+
+"CERTIFICATE_VERIFY_FAILED" / "unable to get local issuer certificate"
+   When the app tries to download the tools, Windows (or your network)
+   isn't trusting the connection to GitHub. Usually it's one of these:
+     - Antivirus "HTTPS scanning" / "web shield" (Kaspersky, Avast, ESET,
+       Bitdefender and similar). Pause that feature and restart the app.
+     - A work or school network or proxy that inspects traffic.
+     - Your PC's date and time are wrong. Fix them and try again.
+     - Python-only: run  python -m pip install -U certifi  and restart.
+   If you can't fix it, skip the auto-install and use the manual way in
+   Section 2 (winget, pip or just download the .exe files into the "tools"
+   folder yourself).
+
+Antivirus flagged a downloaded .exe
+   yt-dlp.exe, gallery-dl.exe and ffmpeg.exe come straight from their official
+   GitHub releases, but unsigned command-line tools sometimes trip antivirus
+   heuristics. If you're not comfortable, install them with winget or pip
+   instead.
+
+A black command window pops up
+   It shouldn't in this version. If you ever see one, you're probably running
+   an older copy of the script.
+
+Nothing seems to be happening
+   Look at the log at the bottom of the Downloader tab and at the little
+   status line below the tabs. Big playlists take a while to list before the
+   first download starts.
+
+
+A QUICK, BORING-BUT-IMPORTANT NOTE
+----------------------------------
+Only download things you own, things that are in the public domain, or things
+you've got permission to save. Copyright rules and each website's terms of
+service are your responsibility, not the program's.
+
+Enjoy!
