@@ -8,3 +8,6 @@ You are solely responsible for what you download and what you do with it. Make s
 This project is not affiliated with, endorsed by, or sponsored by YouTube, Google, SoundCloud, TikTok, Instagram, Meta, or any other service it can work with. All trademarks belong to their owners.
 
 By using this software, you accept that the author is not liable for any damages, losses, account actions, or legal issues that come from using it.
+
+
+(and shoutout to ytdlp for being the only reason this downloader works)
