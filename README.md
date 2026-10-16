@@ -11,3 +11,6 @@ By using this software, you accept that the author is not liable for any damages
 
 
 (and shoutout to ytdlp for being the only reason this downloader works)
+
+
+(ALSO IF DOWNLOADING INSTAGRAM STORIES/POSTS DOESN'T WORK ITS GALLERYDL NOT BEING UPDATED BY THEIR DEVS, PLEASE WAIT FOR THE GALLERYDL DEVS TO FIX!)
